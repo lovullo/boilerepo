@@ -19,8 +19,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-host=thrall1.lovullo.local
-user=git
+declare -r host="${BOILEREPO_HOST?BOILEREPO_HOST is not set}"
+declare -r user="${BOILEREPO_USER?BOILEREPO_USER for $host is not set}"
 
 declare -r reponame="$1"
 

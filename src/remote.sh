@@ -19,8 +19,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-declare -r user="${1?Missing remote user}"
-declare -r host="${2?Missing remote host}"
+declare -r _ruser="${1?Missing remote user}"
+declare -r _rhost="${2?Missing remote host}"
 
 
 ##
@@ -31,7 +31,7 @@ declare -r host="${2?Missing remote host}"
 #
 get-type-list()
 {
-  ssh "$user@$host" find . -type d -maxdepth 2 \! -name '".*"' \
+  ssh "$_ruser@$_rhost" find . -type d -maxdepth 2 \! -name '".*"' \
     | grep -v .git \
     | sed 's#^./##g'
 }
@@ -43,7 +43,7 @@ get-type-list()
 get-type-readme()
 {
   local -r type="$1"
-  ssh "$user@$host" cat "./$type/README" 2>/dev/null \
+  ssh "$_ruser@$_rhost" cat "./$type/README" 2>/dev/null \
     '||' echo No description available.
 }
 
@@ -53,7 +53,7 @@ get-type-readme()
 #
 list-type-repos()
 {
-  ssh "$user@$host" ls "'./$type/'" \
+  ssh "$_ruser@$_rhost" ls "'./$type/'" \
     | grep .git$ \
     | sed 's/^/  /g'
 }
@@ -65,6 +65,6 @@ list-type-repos()
 create-repo()
 {
   local -r path="$1"
-  ssh "$user@$host" "mkdir -p '$path' && git init --bare '$path'"
+  ssh "$_ruser@$_rhost" "mkdir -p '$path' && git init --bare '$path'"
 }
 
