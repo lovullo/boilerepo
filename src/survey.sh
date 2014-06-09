@@ -28,13 +28,13 @@
 #
 prompt-repo-name()
 {
+  local default="$1"
+
   local name
-  read -p "Enter an all-lowercase name for this repo ($reponame): " name
+  read -p "Enter an all-lowercase name for this repo ($default): " name
 
   # use what they entered on the command line if nothing here was entered
-  if [ -z "$name" ]; then
-    name="$reponame"
-  fi
+  [ -n "$name" ] || name="$default"
 
   test -n "$name" \
     && echo "${name%%.git}" \

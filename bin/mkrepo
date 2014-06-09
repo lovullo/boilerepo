@@ -21,7 +21,9 @@
 
 host=thrall1.lovullo.local
 user=git
-reponame="$1"
+
+declare -r reponame="$1"
+
 
 # place ourselves into a known working directory
 cd "$(dirname $0)"/../src
@@ -38,7 +40,7 @@ main()
   echo "Retrieving repository type list..."
 
   local -r type="$( prompt-type $(get-type-list) )"
-  local -r name="$( prompt-repo-name )"
+  local -r name="$( prompt-repo-name "$reponame" )"
   echo
 
   local -r path="$type/$name.git"
