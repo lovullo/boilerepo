@@ -26,7 +26,7 @@ reponame="$1"
 # place ourselves into a known working directory
 cd "$(dirname $0)"/../src
 
-source remote.sh
+source remote.sh "$user" "$host"
 
 
 ##

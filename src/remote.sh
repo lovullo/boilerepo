@@ -19,6 +19,10 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+declare -r user="${1?Missing remote user}"
+declare -r host="${2?Missing remote host}"
+
+
 ##
 # Retrieve available repository types
 #
