@@ -23,41 +23,10 @@ host=thrall1.lovullo.local
 user=git
 reponame="$1"
 
+# place ourselves into a known working directory
+cd "$(dirname $0)"/../src
 
-##
-# Retrieve available repository types
-#
-# This script does not permit creating your own; you must manually do so on
-# the remote host.
-#
-get-type-list()
-{
-  ssh "$user@$host" find . -type d -maxdepth 2 \! -name '".*"' \
-    | grep -v .git \
-    | sed 's#^./##g'
-}
-
-
-##
-# Retrieve README for a repository type
-#
-get-type-readme()
-{
-  local -r type="$1"
-  ssh "$user@$host" cat "./$type/README" 2>/dev/null \
-    '||' echo No description available.
-}
-
-
-##
-# List all repos of a given type
-#
-list-type-repos()
-{
-  ssh "$user@$host" ls "'./$type/'" \
-    | grep .git$ \
-    | sed 's/^/  /g'
-}
+source remote.sh
 
 
 ##
@@ -119,16 +88,6 @@ prompt-type()
   done >&2
 
   echo "$type"
-}
-
-
-##
-# Create and initialize a new bare repository on the remote host
-#
-create-repo()
-{
-  local -r path="$1"
-  ssh "$user@$host" "mkdir -p '$path' && git init --bare '$path'"
 }
 
 
