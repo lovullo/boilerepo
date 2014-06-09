@@ -19,17 +19,18 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-declare -r host="${BOILEREPO_HOST?BOILEREPO_HOST is not set}"
-declare -r user="${BOILEREPO_USER?BOILEREPO_USER for $host is not set}"
-
-declare -r reponame="$1"
-
-
 # place ourselves into a known working directory
 cd "$(dirname $0)"/../src
 
-source remote.sh "$user" "$host"
+source conf.sh
+
+_conf-set-nonempty remote.user "$BOILEREPO_USER"
+_conf-set-nonempty remote.host "$BOILEREPO_HOST"
+
+source remote.sh
 source survey.sh
+
+declare -r reponame="$1"
 
 
 ##
@@ -50,6 +51,9 @@ main()
   test "$ok" == y || return 1
 
   local -r clonepath="./${path%%.git}"
+  local user host
+  _conf-require user=remote.user host=remote.host
+
   create-repo "$path" \
     && git clone "$user@$host":"$path" "$clonepath" \
     || {

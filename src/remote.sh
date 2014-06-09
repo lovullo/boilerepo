@@ -19,8 +19,14 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-declare -r _ruser="${1?Missing remote user}"
-declare -r _rhost="${2?Missing remote host}"
+[ -z $__INC_REMOTE ] || return
+declare -r __INC_REMOTE=1
+
+source conf.sh
+
+
+declare _ruser _rhost
+_conf-require _ruser=remote.user _rhost=remote.host
 
 
 ##
