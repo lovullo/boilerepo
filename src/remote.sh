@@ -30,20 +30,6 @@ _conf-require _ruser=remote.user _rhost=remote.host
 
 
 ##
-# Retrieve available repository types
-#
-# This script does not permit creating your own; you must manually do so on
-# the remote host.
-#
-get-type-list()
-{
-  ssh "$_ruser@$_rhost" find . -type d -maxdepth 2 \! -name '".*"' \
-    | grep -v .git \
-    | sed 's#^./##g'
-}
-
-
-##
 # Retrieve README for a repository type
 #
 get-type-readme()

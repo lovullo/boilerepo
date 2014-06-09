@@ -20,6 +20,27 @@
 ##
 
 
+_do-survey()
+{
+  local -r name="$1"
+  local -r path="./survey/$name.sh"
+  local -r hook="_survey--$name"
+
+  [ -r "$path" ] || return 1
+  source "$path" || return $?
+
+  type -t "_survey--$name" &>/dev/null || return 1
+  $hook
+}
+
+
+__survey-loaded()
+{
+  local -r name="$1"
+  [ -n "${__survey[$name]}" ]
+}
+
+
 ##
 # Prompt for the repository name
 #
@@ -40,44 +61,3 @@ prompt-repo-name()
     && echo "${name%%.git}" \
     || prompt-repo-name
 }
-
-
-##
-# Prompt for the repository type
-#
-# After a selection is made, the type README will be displayed, along with a
-# list of all repositories of that type (as examples). If the user indicates
-# that they do not want this selection, then they will be asked to choose
-# another.
-#
-prompt-type()
-{
-  echo 'Please select a repo to view its description' >&2
-
-  local -r PS3='What type of repo? '
-  local -r types=($@)
-  local type
-
-  select type; do
-    test -n "$type" || {
-      echo "Invalid type"
-      continue
-    }
-
-    get-type-readme "$type"
-    echo
-
-    echo 'Here are the existing repositories of this type:'
-    list-type-repos "$type"
-    echo
-
-    local ok=n
-    read -p 'Is this the type of repository you want (y/N)? ' ok
-
-    test "$ok" == y || continue
-    break
-  done >&2
-
-  echo "$type"
-}
-

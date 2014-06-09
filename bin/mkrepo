@@ -40,7 +40,7 @@ main()
 {
   echo "Retrieving repository type list..."
 
-  local -r type="$( prompt-type $(get-type-list) )"
+  local -r type="$( _do-survey type )"
   local -r name="$( prompt-repo-name "$reponame" )"
   echo
 
