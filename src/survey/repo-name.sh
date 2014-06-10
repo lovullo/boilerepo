@@ -1,5 +1,5 @@
 #!/bin/bash
-# Survey the user for repository information
+# Repository name survey
 #
 #  Copyright (C) 2014 LoVullo Associates, Inc.
 #
@@ -19,46 +19,23 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-source conf.sh
-
 
 ##
-# Perform survey
+# Prompt for the repository name
 #
-# If a second parameter is provided, the results of the survey will be stored in
-# the configuation variable of that name; otherwise, the results are echoed.
+# Will recurse until a name is entered, but will default to the name entered on
+# the command line.
 #
-_do-survey()
+_survey--repo-name()
 {
-  local -r name="$1"
-  local -r confvar="$2"
-  shift 2
+  local default="$1"
 
-  local -r path="./survey/$name.sh"
-  local -r hook="_survey--$name"
+  local name
+  read -p "Enter an all-lowercase name for this repo ($default): " name
+  test -n "$name" || name="$default"
 
-  [ -r "$path" ] || return 1
-  source "$path" || return $?
-
-  type -t "_survey--$name" &>/dev/null || return 1
-
-  local result
-  result="$( $hook "$@" )" || return $?
-
-  if [ -n "$confvar" ]; then
-    _conf-set "$confvar" "$result"
-  else
-    echo "$result"
-  fi
-}
-
-
-##
-# Test whether the given survey is loaded
-#
-__survey-loaded()
-{
-  local -r name="$1"
-  [ -n "${__survey[$name]}" ]
+  test -n "$name" \
+    && echo "${name%%.git}" \
+    || prompt-repo-name
 }
 

@@ -31,7 +31,7 @@ _conf-from-git remote.host boilerepo.remote.host
 source remote.sh
 source survey.sh
 
-declare -r reponame="$1"
+declare -r __reponame="$1"
 
 
 ##
@@ -42,10 +42,10 @@ main()
   echo "Retrieving repository type list..."
 
   _do-survey type repo.type
-  local -r name="$( prompt-repo-name "$reponame" )"
+  _do-survey repo-name repo.name "$__reponame"
   echo
 
-  _conf-require type=repo.type
+  _conf-require type=repo.type name=repo.name
   local -r path="$type/$name.git"
   local ok
 
