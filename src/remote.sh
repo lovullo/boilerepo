@@ -30,28 +30,6 @@ _conf-require _ruser=remote.user _rhost=remote.host
 
 
 ##
-# Retrieve README for a repository type
-#
-get-type-readme()
-{
-  local -r type="$1"
-  ssh "$_ruser@$_rhost" cat "./$type/README" 2>/dev/null \
-    '||' echo No description available.
-}
-
-
-##
-# List all repos of a given type
-#
-list-type-repos()
-{
-  ssh "$_ruser@$_rhost" ls "'./$type/'" \
-    | grep .git$ \
-    | sed 's/^/  /g'
-}
-
-
-##
 # Create and initialize a new bare repository on the remote host
 #
 create-repo()

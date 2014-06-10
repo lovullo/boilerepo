@@ -36,13 +36,25 @@ declare -Ar __conf_desc=(
 )
 
 
-
+##
+# Retrieve value associated with configuration name
+#
 _conf-get()
 {
   local -r name="$1"
   local -r default="$2"
 
   echo "${__conf[$name]:-$default}"
+}
+
+
+##
+# Retrieve configuration description for given key
+#
+_conf-desc()
+{
+  local -r name="$1"
+  echo "${__conf_desc[$name]}"
 }
 
 

@@ -20,9 +20,26 @@
 ##
 
 
+##
+# Survey hook
+#
 _survey--type()
 {
-  __prompt-type $(__get-type-list)
+  local ok=n
+  until [ "$ok" == y ]; do
+    type="$( __prompt-type $(__get-type-list) )"
+
+    __get-type-readme "$type"
+    echo
+
+    echo 'Here are the existing repositories of this type:'
+    __list-type-repos "$type"
+    echo
+
+    read -p 'Is this the type of repository you want (y/N)? ' ok
+  done >&2
+
+  echo "$type"
 }
 
 
@@ -48,7 +65,6 @@ __prompt-type()
   echo 'Please select a repo to view its description' >&2
 
   local -r PS3='What type of repo? '
-  local -r types=($@)
   local type
 
   select type; do
@@ -57,20 +73,40 @@ __prompt-type()
       continue
     }
 
-    get-type-readme "$type"
-    echo
-
-    echo 'Here are the existing repositories of this type:'
-    list-type-repos "$type"
-    echo
-
-    local ok=n
-    read -p 'Is this the type of repository you want (y/N)? ' ok
-
-    test "$ok" == y || continue
     break
   done >&2
 
   echo "$type"
+}
+
+
+##
+# Retrieve README for a repository type
+#
+__get-type-readme()
+{
+  local -r type="$1"
+  local user host
+
+  _conf-require user=remote.user host=remote.host
+
+  ssh "$user@$host" cat "./$type/README" 2>/dev/null \
+    '||' echo No description available.
+}
+
+
+##
+# List all repos of a given type
+#
+__list-type-repos()
+{
+  local -r type="$1"
+  local user host
+
+  _conf-require user=remote.user host=remote.host
+
+  ssh "$user@$host" ls "'./$type/'" \
+    | grep .git$ \
+    | sed 's/^/  /g'
 }
 
