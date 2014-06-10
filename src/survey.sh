@@ -25,8 +25,7 @@ source conf.sh
 ##
 # Perform survey
 #
-# If a second parameter is provided, the results of the survey will be stored in
-# the configuation variable of that name; otherwise, the results are echoed.
+# The result of the survey is assigned to the given configuration variable name.
 #
 _do-survey()
 {
@@ -45,11 +44,7 @@ _do-survey()
   local result
   result="$( $hook "$@" )" || return $?
 
-  if [ -n "$confvar" ]; then
-    _conf-set "$confvar" "$result"
-  else
-    echo "$result"
-  fi
+  _conf-set "$confvar" "$result"
 }
 
 
