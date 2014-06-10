@@ -51,11 +51,9 @@ main()
   test "$ok" == y || return 1
 
   local -r clonepath="./${path%%.git}"
-  local user host
-  _conf-require user=remote.user host=remote.host
 
-  create-repo "$path" \
-    && git clone "$user@$host":"$path" "$clonepath" \
+  _create-repo "$path" \
+    && _clone-repo "$path" "$clonepath" \
     || {
       echo "Failed to create repository; I have failed you." >&2
       return 1

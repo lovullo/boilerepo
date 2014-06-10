@@ -26,15 +26,33 @@ source conf.sh
 
 
 declare _ruser _rhost
-_conf-require _ruser=remote.user _rhost=remote.host
 
 
 ##
 # Create and initialize a new bare repository on the remote host
 #
-create-repo()
+_create-repo()
 {
   local -r path="$1"
-  ssh "$_ruser@$_rhost" "mkdir -p '$path' && git init --bare '$path'"
+  local user host
+
+  _conf-require user=remote.user host=remote.host
+
+  ssh "$user@$host" "mkdir -p '$path' && git init --bare '$path'"
+}
+
+
+##
+# Clone remote repository
+#
+_clone-repo()
+{
+  local -r path="$1"
+  local -r clonepath="$2"
+  local user host
+
+  _conf-require user=remote.user host=remote.host
+
+  git clone "$user@$host:$path" "$clonepath"
 }
 
