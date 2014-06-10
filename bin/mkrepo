@@ -25,8 +25,8 @@ cd "$(dirname $0)"/../src
 
 source conf.sh
 
-_conf-set-nonempty remote.user "$BOILEREPO_USER"
-_conf-set-nonempty remote.host "$BOILEREPO_HOST"
+_conf-from-git remote.user boilerepo.remote.user
+_conf-from-git remote.host boilerepo.remote.host
 
 source remote.sh
 source survey.sh

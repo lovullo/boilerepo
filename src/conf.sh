@@ -115,3 +115,22 @@ _conf-set-nonempty()
   _conf-set "$name" "$value"
 }
 
+
+##
+# Attempts to populate configuration value from a git configuration value
+#
+# If the git configuration value does not exist or is empty, nothing is done (so
+# any existing CONFVAR value will be maintained).
+#
+_conf-from-git()
+{
+  local -r confvar="$1"
+  local -r gitvar="$2"
+
+  gitval="$( git config "$gitvar" 2>/dev/null )" \
+    && test -n "$gitval" \
+    || return $?
+
+  _conf-set "$confvar" "$gitval"
+}
+
