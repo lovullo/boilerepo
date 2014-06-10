@@ -28,10 +28,9 @@ source conf.sh
 _conf-from-git remote.user boilerepo.remote.user
 _conf-from-git remote.host boilerepo.remote.host
 
+source cmdline.sh
 source remote.sh
 source survey.sh
-
-declare -r __reponame="$1"
 
 
 ##
@@ -39,6 +38,8 @@ declare -r __reponame="$1"
 #
 main()
 {
+  _parse-cmdline "$@"
+
   echo "Retrieving repository type list..."
 
   _do-survey type repo.type
@@ -65,5 +66,5 @@ main()
   echo 'Happy hacking.'
 }
 
-main
+main "$@"
 
