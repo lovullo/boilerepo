@@ -87,6 +87,18 @@ _conf-read-or()
 }
 
 
+##
+# Perform variable assignments from configuration values
+#
+# If a configuration variable is not set, it will be set to an empty value; no
+# error will occur.
+#
+_conf-read()
+{
+  _conf-read-or true "$@"
+}
+
+
 _conf-require()
 {
   _conf-read-or __conf-fatal "$@"
