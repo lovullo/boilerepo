@@ -41,14 +41,15 @@ main()
 {
   echo "Retrieving repository type list..."
 
-  local -r type="$( _do-survey type )"
+  _do-survey type repo.type
   local -r name="$( prompt-repo-name "$reponame" )"
   echo
 
+  _conf-require type=repo.type
   local -r path="$type/$name.git"
   local ok
-  read -p "Going to create $path; is this ok (y/N)? " ok
 
+  read -p "Going to create $path; is this ok (y/N)? " ok
   test "$ok" == y || return 1
 
   local -r clonepath="$__wd/${path%%.git}"

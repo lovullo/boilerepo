@@ -19,10 +19,19 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+source conf.sh
 
+
+##
+# Perform survey
+#
+# If a second parameter is provided, the results of the survey will be stored in
+# the configuation variable of that name; otherwise, the results are echoed.
+#
 _do-survey()
 {
   local -r name="$1"
+  local -r confvar="$2"
   local -r path="./survey/$name.sh"
   local -r hook="_survey--$name"
 
@@ -30,10 +39,21 @@ _do-survey()
   source "$path" || return $?
 
   type -t "_survey--$name" &>/dev/null || return 1
-  $hook
+
+  local result
+  result="$( $hook )" || return $?
+
+  if [ -n "$confvar" ]; then
+    _conf-set "$confvar" "$result"
+  else
+    echo "$result"
+  fi
 }
 
 
+##
+# Test whether the given survey is loaded
+#
 __survey-loaded()
 {
   local -r name="$1"
