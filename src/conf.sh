@@ -58,22 +58,29 @@ _conf-desc()
 }
 
 
+##
+# Perform variable assignments from configuration values
+#
+# Note that each of these variables have an obnoxious number of underscores;
+# this is because we're using `read` and we need to ensure that we do not
+# conflict with any names that the user may provide.
+#
 _conf-read-or()
 {
-  local -r or="$1"
-  local name value
+  local -r ___or="$1"
+  local ___name ___value ___assign
   shift
 
   while (($#)); do
-    assign="${1%%=*}"
-    name="${1##*=}"
+    ___assign="${1%%=*}"
+    ___name="${1##*=}"
 
-    value="$( _conf-get "$name" )"
-    read "$assign" <<< "$value"
+    ___value="$( _conf-get "$___name" )"
+    read "$___assign" <<< "$___value"
     shift
 
-    if [ -z "$value" ]; then
-      $or "$name" || return $?
+    if [ -z "$___value" ]; then
+      $___or "$___name" || return $?
       continue
     fi
   done
