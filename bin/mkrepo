@@ -20,6 +20,7 @@
 ##
 
 # place ourselves into a known working directory
+declare -r __wd="$( pwd )"
 cd "$(dirname $0)"/../src
 
 source conf.sh
@@ -50,7 +51,7 @@ main()
 
   test "$ok" == y || return 1
 
-  local -r clonepath="./${path%%.git}"
+  local -r clonepath="$__wd/${path%%.git}"
 
   _create-repo "$path" \
     && _clone-repo "$path" "$clonepath" \
