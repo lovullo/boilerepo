@@ -33,6 +33,11 @@ _do-survey()
   local -r confvar="$2"
   shift 2
 
+  # if the configuration var is already set, then there's no need to re-survey
+  local curval
+  _conf-read curval="$confvar"
+  test -z "$curval" || return
+
   local -r path="./survey/$name.sh"
   local -r hook="_survey--$name"
 
