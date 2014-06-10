@@ -33,9 +33,9 @@ declare -ri __EX_USAGE=64
 #
 _parse-cmdline()
 {
-  while getopts "c:" opt; do
+  while getopts "v:" opt; do
     case "$opt" in
-      c) __cmdline-conf "$OPTARG";;
+      v) __cmdline-conf "$OPTARG";;
       ?) exit __EX_USAGE;
     esac
   done >&2
